@@ -14,11 +14,14 @@ const DEVICES = [
 
 const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
   const [selectedDevices, setSelectedDevices] = useState([]);
+  const [customDevice, setCustomDevice] = useState('');
   const [formData, setFormData] = useState({
     company: '',
     name: '',
     phone: '',
-    email: ''
+    email: '',
+    serialNumber: '',
+    description: ''
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,6 +56,9 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
     if (selectedDevices.length === 0) {
       newErrors.devices = "Sélectionnez au moins un dispositif.";
     }
+    if (selectedDevices.includes("Autre...") && !customDevice.trim()) {
+      newErrors.customDevice = "Veuillez spécifier votre équipement.";
+    }
     if (!formData.name.trim()) {
       newErrors.name = "Nom et prénom obligatoires.";
     }
@@ -65,6 +71,12 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
       newErrors.email = "Adresse email obligatoire.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       newErrors.email = "Format email invalide.";
+    }
+    if (!formData.serialNumber.trim()) {
+      newErrors.serialNumber = "Numéro de série obligatoire.";
+    }
+    if (!formData.description.trim()) {
+      newErrors.description = "Description du problème obligatoire.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -81,13 +93,17 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
     setIsSubmitting(true);
 
     setTimeout(() => {
+      const mappedDevices = selectedDevices.map(d => d === "Autre..." ? `Autre: ${customDevice}` : d);
+      
       const newTicket = {
         id: 'cesam-' + Math.random().toString(36).substr(2, 9),
         name: formData.name,
         company: formData.company || 'Cabinet Indépendant',
         phone: formData.phone,
         email: formData.email,
-        devices: selectedDevices,
+        devices: mappedDevices,
+        serialNumber: formData.serialNumber,
+        description: formData.description,
         date: new Date().toISOString(),
         status: 'new'
       };
@@ -101,11 +117,13 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
       console.log("%c[CESAM SYSTEM - TICKET SENT]", "color: #00f2fe; font-weight: bold; letter-spacing: 0.05em;");
       console.log(`Destinataire : medyassine.1234567@gmail.com`);
       console.log(`Objet : [SAV Cesam] Demande d'Entretien Technique`);
-      console.log(`Appareil(s) : ${selectedDevices.join(", ")}`);
+      console.log(`Appareil(s) : ${mappedDevices.join(", ")}`);
       console.log(`Nom Client : ${formData.name}`);
       console.log(`Société : ${formData.company || 'N/A'}`);
       console.log(`Téléphone : ${formData.phone}`);
       console.log(`Email : ${formData.email}`);
+      console.log(`Numéro de Série : ${formData.serialNumber}`);
+      console.log(`Description : ${formData.description}`);
     }, 1800);
   };
 
@@ -178,20 +196,44 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
             );
           })}
         </div>
+        
+        {/* Custom equipment text input if "Autre..." is selected */}
+        {selectedDevices.includes("Autre...") && (
+          <div className="form-group animate-liquid-in" style={{ marginTop: '0.75rem', marginBottom: '1.25rem' }}>
+            <label htmlFor="customDevice">Spécifiez votre équipement</label>
+            <input
+              type="text"
+              id="customDevice"
+              name="customDevice"
+              className={`form-input ${errors.customDevice ? 'input-error' : ''}`}
+              placeholder="Ex: Appareil de cryolipolyse..."
+              value={customDevice}
+              onChange={(e) => {
+                setCustomDevice(e.target.value);
+                if (errors.customDevice) {
+                  setErrors(prev => ({ ...prev, customDevice: null }));
+                }
+              }}
+              onFocus={handleInputFocus}
+            />
+            {errors.customDevice && <span style={{ color: 'var(--color-red)', fontSize: '0.72rem', fontWeight: 300 }}>{errors.customDevice}</span>}
+          </div>
+        )}
+
         {errors.devices && (
-          <div className="animate-liquid-in stagger-7" style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '-1.25rem', marginBottom: '1.25rem', fontWeight: 300 }}>
+          <div className="animate-liquid-in" style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '-0.75rem', marginBottom: '1.25rem', fontWeight: 300 }}>
             {errors.devices}
           </div>
         )}
 
         {/* Step 2: Info */}
-        <div className="section-label animate-liquid-in stagger-8" style={{ marginTop: '0.5rem' }}>
+        <div className="section-label animate-liquid-in" style={{ marginTop: '0.5rem' }}>
           <span className="section-label-number">2</span>
-          Informations de contact
+          Informations de contact et détails
         </div>
 
         <div className="form-grid">
-          <div className="form-group animate-liquid-in stagger-9">
+          <div className="form-group animate-liquid-in">
             <label htmlFor="company">Cabinet / Société / Institut</label>
             <input
               type="text"
@@ -205,7 +247,7 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
             />
           </div>
 
-          <div className="form-group animate-liquid-in stagger-9">
+          <div className="form-group animate-liquid-in">
             <label htmlFor="name">Nom et Prénom</label>
             <input
               type="text"
@@ -220,7 +262,7 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
             {errors.name && <span style={{ color: 'var(--color-red)', fontSize: '0.72rem', fontWeight: 300 }}>{errors.name}</span>}
           </div>
 
-          <div className="form-group animate-liquid-in stagger-10">
+          <div className="form-group animate-liquid-in">
             <label htmlFor="phone">Téléphone</label>
             <input
               type="tel"
@@ -235,7 +277,7 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
             {errors.phone && <span style={{ color: 'var(--color-red)', fontSize: '0.72rem', fontWeight: 300 }}>{errors.phone}</span>}
           </div>
 
-          <div className="form-group animate-liquid-in stagger-10">
+          <div className="form-group animate-liquid-in">
             <label htmlFor="email">Adresse email</label>
             <input
               type="email"
@@ -248,6 +290,37 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
               onFocus={handleInputFocus}
             />
             {errors.email && <span style={{ color: 'var(--color-red)', fontSize: '0.72rem', fontWeight: 300 }}>{errors.email}</span>}
+          </div>
+
+          <div className="form-group animate-liquid-in" style={{ gridColumn: 'span 2' }}>
+            <label htmlFor="serialNumber">Numéro de série de l'appareil</label>
+            <input
+              type="text"
+              id="serialNumber"
+              name="serialNumber"
+              className={`form-input ${errors.serialNumber ? 'input-error' : ''}`}
+              placeholder="Ex: CS-2026-X891"
+              value={formData.serialNumber}
+              onChange={handleInputChange}
+              onFocus={handleInputFocus}
+            />
+            {errors.serialNumber && <span style={{ color: 'var(--color-red)', fontSize: '0.72rem', fontWeight: 300 }}>{errors.serialNumber}</span>}
+          </div>
+
+          <div className="form-group animate-liquid-in" style={{ gridColumn: 'span 2' }}>
+            <label htmlFor="description">Description du problème / Détail de l'intervention</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="3"
+              className={`form-input ${errors.description ? 'input-error' : ''}`}
+              placeholder="Ex: Le système de refroidissement ne s'active pas, code d'erreur E04..."
+              value={formData.description}
+              onChange={handleInputChange}
+              onFocus={handleInputFocus}
+              style={{ resize: 'vertical', fontFamily: 'inherit' }}
+            />
+            {errors.description && <span style={{ color: 'var(--color-red)', fontSize: '0.72rem', fontWeight: 300 }}>{errors.description}</span>}
           </div>
         </div>
 

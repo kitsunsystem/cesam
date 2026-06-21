@@ -345,6 +345,25 @@ const Backoffice = ({ tickets, onUpdateStatus, onDeleteTicket, onClose, addToast
                           ))}
                         </div>
                       </div>
+
+                      {ticket.serialNumber && (
+                        <div className="ticket-detail-item" style={{ marginTop: '0.65rem' }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                          </svg>
+                          <span style={{ fontSize: '0.74rem' }}>
+                            <strong style={{ color: 'var(--text-muted)' }}>S/N :</strong> {ticket.serialNumber}
+                          </span>
+                        </div>
+                      )}
+
+                      {ticket.description && (
+                        <div style={{ marginTop: '0.65rem', background: 'rgba(255, 255, 255, 0.012)', padding: '0.55rem', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.04)' }}>
+                          <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontWeight: 600, marginBottom: '0.2rem', letterSpacing: '0.05em' }}>DESCRIPTION DU PROBLÈME</div>
+                          <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', lineHeight: '1.4', whiteSpace: 'pre-wrap' }}>{ticket.description}</div>
+                        </div>
+                      )}
                     </div>
                   </div>
 

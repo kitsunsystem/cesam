@@ -564,17 +564,7 @@ function App() {
               </div>
 
               <div className="grid-container">
-                <div className="glass-card animate-liquid-in stagger-4" onClick={() => navigateWithTransition("empty-state", "le SAV en vidéo")}>
-                  <div className="card-title">
-                    le SAV en vidéo
-                    <span className="card-badge">Bientôt</span>
-                  </div>
-                  <p className="card-desc">
-                    Tutoriels vidéo et manuels de démarrage rapide pour l'utilisation autonome de vos dispositifs.
-                  </p>
-                </div>
-
-                <div className="glass-card animate-liquid-in stagger-5" onClick={() => navigateWithTransition("empty-state", "boutique en ligne")}>
+                <div className="glass-card animate-liquid-in stagger-4" onClick={() => navigateWithTransition("empty-state", "boutique en ligne")}>
                   <div className="card-title">
                     boutique en ligne
                     <span className="card-badge">Bientôt</span>
@@ -584,13 +574,23 @@ function App() {
                   </p>
                 </div>
 
-                <div className="glass-card animate-liquid-in stagger-6 liquid-glow" style={{ borderColor: 'rgba(0, 242, 254, 0.15)' }} onClick={() => navigateWithTransition('maintenance')}>
+                <div className="glass-card animate-liquid-in stagger-5 liquid-glow" style={{ borderColor: 'rgba(0, 242, 254, 0.15)' }} onClick={() => navigateWithTransition('maintenance')}>
                   <div className="card-title">
                     Demande d'entretien
                     <span className="card-badge" style={{ background: 'rgba(0, 242, 254, 0.08)', borderColor: 'rgba(0, 242, 254, 0.25)', color: 'var(--accent-cyan)' }}>Ouvrir</span>
                   </div>
                   <p className="card-desc">
                     Formulaire technique de demande d'assistance périodique ou curative pour vos dispositifs.
+                  </p>
+                </div>
+
+                <div className="glass-card animate-liquid-in stagger-6" onClick={() => navigateWithTransition("empty-state", "le SAV en vidéo")}>
+                  <div className="card-title">
+                    le SAV en vidéo
+                    <span className="card-badge">Bientôt</span>
+                  </div>
+                  <p className="card-desc">
+                    Tutoriels vidéo et manuels de démarrage rapide pour l'utilisation autonome de vos dispositifs.
                   </p>
                 </div>
               </div>
