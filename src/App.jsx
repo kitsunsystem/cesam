@@ -75,6 +75,7 @@ function App() {
 
   // Navigation states
   const [currentScreen, setCurrentScreen] = useState('home');
+  const [previousScreen, setPreviousScreen] = useState('home');
   const [emptyPageTitle, setEmptyPageTitle] = useState('');
   const [tickets, setTickets] = useState([]);
   const [toasts, setToasts] = useState([]);
@@ -279,7 +280,7 @@ function App() {
   };
 
   // iOS-style Soft Condensation Transition Coordinator
-  const navigateWithTransition = (screen, title = '') => {
+  const navigateWithTransition = (screen, title = '', backScreen = '') => {
     if (isTransitioning) return;
     
     playTransition();
@@ -290,6 +291,9 @@ function App() {
     setTimeout(() => {
       if (title) {
         setEmptyPageTitle(title);
+      }
+      if (screen === 'empty-state') {
+        setPreviousScreen(backScreen || currentScreen);
       }
       setCurrentScreen(screen);
       setTransitionState('entering');
@@ -500,31 +504,31 @@ function App() {
             <div>
               <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
                 <h1 className="animate-liquid-in stagger-1" style={{ fontSize: '1.8rem', fontWeight: '200', marginBottom: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                  Portail Partenaires
+                  CESAM APP
                 </h1>
-                <p className="animate-liquid-in stagger-2" style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: '300', maxWidth: '480px', margin: '0 auto', lineHeight: '1.7' }}>
-                  Sélectionnez votre espace d'activité pour gérer vos commandes de consommables ou planifier une intervention technique.
+                <p className="animate-liquid-in stagger-2" style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: '300', maxWidth: '520px', margin: '0 auto', lineHeight: '1.7' }}>
+                  Sélectionnez votre espace d'activité pour gérer vos consommables, vos supports de communication ou votre SAV.
                 </p>
               </div>
               
               <div className="grid-container">
-                <div className="glass-card animate-liquid-in stagger-3" onClick={() => navigateWithTransition("empty-state", "Consommables JetPeel")}>
+                <div className="glass-card animate-liquid-in stagger-3" onClick={() => navigateWithTransition("consommables")}>
                   <div className="card-title">
-                    Consommables JetPeel
-                    <span className="card-badge">Bientôt</span>
+                    Nos Consomables
+                    <span className="card-badge" style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'var(--text-secondary)' }}>Ouvrir</span>
                   </div>
                   <p className="card-desc">
-                    Commande de pièces à main, pièces de rechange et solutions d'infusion authentiques JetPeel.
+                    Commandes de consommables d'origine (JetPeel, Wishpro, Skin Eclipse, Twin Slim).
                   </p>
                 </div>
 
-                <div className="glass-card animate-liquid-in stagger-4" onClick={() => navigateWithTransition("empty-state", "Wishpro")}>
+                <div className="glass-card animate-liquid-in stagger-4" onClick={() => navigateWithTransition("communication")}>
                   <div className="card-title">
-                    Wishpro
-                    <span className="card-badge">Bientôt</span>
+                    Support de communication
+                    <span className="card-badge" style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'var(--text-secondary)' }}>Ouvrir</span>
                   </div>
                   <p className="card-desc">
-                    Accès direct aux capsules de soin et accessoires pour vos technologies Wishpro.
+                    Accédez aux ressources marketing, kits réseaux sociaux et brochures de nos marques.
                   </p>
                 </div>
 
@@ -534,7 +538,7 @@ function App() {
                     <span className="card-badge" style={{ background: 'rgba(0, 242, 254, 0.08)', borderColor: 'rgba(0, 242, 254, 0.25)', color: 'var(--accent-cyan)' }}>Actif</span>
                   </div>
                   <p className="card-desc">
-                    Demandes d'entretien technique, guides de mise en service et support opérationnel.
+                    Demandes d'entretien technique, boutique en ligne et SAV en vidéo.
                   </p>
                 </div>
               </div>
@@ -560,19 +564,19 @@ function App() {
               </div>
 
               <div className="grid-container">
-                <div className="glass-card animate-liquid-in stagger-4" onClick={() => navigateWithTransition("empty-state", "Vidéos de mise en service")}>
+                <div className="glass-card animate-liquid-in stagger-4" onClick={() => navigateWithTransition("empty-state", "le SAV en vidéo")}>
                   <div className="card-title">
-                    Mise en service
+                    le SAV en vidéo
                     <span className="card-badge">Bientôt</span>
                   </div>
                   <p className="card-desc">
-                    Tutoriels vidéo et manuels de démarrage rapide pour l'installation autonome de vos dispositifs.
+                    Tutoriels vidéo et manuels de démarrage rapide pour l'utilisation autonome de vos dispositifs.
                   </p>
                 </div>
 
-                <div className="glass-card animate-liquid-in stagger-5" onClick={() => navigateWithTransition("empty-state", "Boutique en ligne")}>
+                <div className="glass-card animate-liquid-in stagger-5" onClick={() => navigateWithTransition("empty-state", "boutique en ligne")}>
                   <div className="card-title">
-                    Boutique en ligne
+                    boutique en ligne
                     <span className="card-badge">Bientôt</span>
                   </div>
                   <p className="card-desc">
@@ -592,6 +596,170 @@ function App() {
               </div>
 
               <div style={{ marginTop: '2.5rem', textAlign: 'center' }} className="animate-liquid-in stagger-7">
+                <button className="glass-button" onClick={() => navigateWithTransition('home')}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                  Retour
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* SCREEN: Nos Consommables */}
+          {currentScreen === 'consommables' && (
+            <div>
+              <div className="breadcrumbs animate-liquid-in stagger-1">
+                <span className="breadcrumb-item" onClick={() => navigateWithTransition('home')}>Accueil</span>
+                <span className="breadcrumb-separator">&gt;</span>
+                <span style={{ color: '#fff' }}>Nos Consommables</span>
+              </div>
+
+              <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                <h1 className="animate-liquid-in stagger-2" style={{ fontSize: '1.8rem', fontWeight: '200', marginBottom: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                  Nos Consomables
+                </h1>
+                <p className="animate-liquid-in stagger-3" style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: '300' }}>
+                  Sélectionnez votre technologie pour commander des consommables d'origine.
+                </p>
+              </div>
+
+              <div className="grid-container">
+                <div className="glass-card animate-liquid-in stagger-4" onClick={() => navigateWithTransition("empty-state", "Consommables JETPEEL")}>
+                  <div className="card-title">
+                    JETPEEL
+                    <span className="card-badge">Bientôt</span>
+                  </div>
+                  <p className="card-desc">
+                    Solutions d'infusion et pièces à main authentiques JetPeel.
+                  </p>
+                </div>
+
+                <div className="glass-card animate-liquid-in stagger-5" onClick={() => navigateWithTransition("empty-state", "Consommables WISHPRO")}>
+                  <div className="card-title">
+                    WISHPRO
+                    <span className="card-badge">Bientôt</span>
+                  </div>
+                  <p className="card-desc">
+                    Capsules de soin et accessoires de traitement Wishpro.
+                  </p>
+                </div>
+
+                <div className="glass-card animate-liquid-in stagger-6" onClick={() => navigateWithTransition("empty-state", "Consommables SKIN ECLIPSE")}>
+                  <div className="card-title">
+                    SKIN ECLIPSE
+                    <span className="card-badge">Bientôt</span>
+                  </div>
+                  <p className="card-desc">
+                    Consommables et accessoires de soin pour votre système Skin Eclipse.
+                  </p>
+                </div>
+
+                <div className="glass-card animate-liquid-in stagger-7" onClick={() => navigateWithTransition("empty-state", "Consommables TWIN SLIM")}>
+                  <div className="card-title">
+                    TWIN SLIM
+                    <span className="card-badge">Bientôt</span>
+                  </div>
+                  <p className="card-desc">
+                    Électrodes, crèmes et pièces à main pour votre dispositif Twin Slim.
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ marginTop: '2.5rem', textAlign: 'center' }} className="animate-liquid-in stagger-8">
+                <button className="glass-button" onClick={() => navigateWithTransition('home')}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                  Retour
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* SCREEN: Support de communication */}
+          {currentScreen === 'communication' && (
+            <div>
+              <div className="breadcrumbs animate-liquid-in stagger-1">
+                <span className="breadcrumb-item" onClick={() => navigateWithTransition('home')}>Accueil</span>
+                <span className="breadcrumb-separator">&gt;</span>
+                <span style={{ color: '#fff' }}>Support de communication</span>
+              </div>
+
+              <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                <h1 className="animate-liquid-in stagger-2" style={{ fontSize: '1.8rem', fontWeight: '200', marginBottom: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                  Support de communication
+                </h1>
+                <p className="animate-liquid-in stagger-3" style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: '300' }}>
+                  Téléchargez nos kits marketing, photos, vidéos et brochures pour vos cabinets.
+                </p>
+              </div>
+
+              <div className="grid-container">
+                <div className="glass-card animate-liquid-in stagger-4" onClick={() => navigateWithTransition("empty-state", "Supports JETPEEL")}>
+                  <div className="card-title">
+                    JETPEEL
+                    <span className="card-badge">Bientôt</span>
+                  </div>
+                  <p className="card-desc">
+                    Brochures, fiches d'information et contenus pour réseaux sociaux.
+                  </p>
+                </div>
+
+                <div className="glass-card animate-liquid-in stagger-5" onClick={() => navigateWithTransition("empty-state", "Supports REJULIGHT")}>
+                  <div className="card-title">
+                    REJULIGHT
+                    <span className="card-badge">Bientôt</span>
+                  </div>
+                  <p className="card-desc">
+                    Visuels HD, vidéos de démonstration et supports cliniques.
+                  </p>
+                </div>
+
+                <div className="glass-card animate-liquid-in stagger-6" onClick={() => navigateWithTransition("empty-state", "Supports VIORA SERIES")}>
+                  <div className="card-title">
+                    VIORA SERIES
+                    <span className="card-badge">Bientôt</span>
+                  </div>
+                  <p className="card-desc">
+                    Kits de communication pour V30, Reaction et technologies Viora.
+                  </p>
+                </div>
+
+                <div className="glass-card animate-liquid-in stagger-7" onClick={() => navigateWithTransition("empty-state", "Supports TWIN SLIM")}>
+                  <div className="card-title">
+                    TWIN SLIM
+                    <span className="card-badge">Bientôt</span>
+                  </div>
+                  <p className="card-desc">
+                    Brochures patientèle, posters de cabinet et visuels réseaux.
+                  </p>
+                </div>
+
+                <div className="glass-card animate-liquid-in stagger-8" onClick={() => navigateWithTransition("empty-state", "Supports PULSELASER")}>
+                  <div className="card-title">
+                    PULSELASER
+                    <span className="card-badge">Bientôt</span>
+                  </div>
+                  <p className="card-desc">
+                    Fiches techniques et outils promotionnels pour le PulseLaser.
+                  </p>
+                </div>
+
+                <div className="glass-card animate-liquid-in stagger-9" onClick={() => navigateWithTransition("empty-state", "Supports POWER SYSTEM")}>
+                  <div className="card-title">
+                    POWER SYSTEM
+                    <span className="card-badge">Bientôt</span>
+                  </div>
+                  <p className="card-desc">
+                    Brochures et kits de mise en valeur pour les technologies Power.
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ marginTop: '2.5rem', textAlign: 'center' }} className="animate-liquid-in stagger-10">
                 <button className="glass-button" onClick={() => navigateWithTransition('home')}>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -626,7 +794,7 @@ function App() {
           {currentScreen === 'empty-state' && (
             <EmptyState 
               title={emptyPageTitle}
-              onBack={() => navigateWithTransition(emptyPageTitle === "Boutique en ligne" || emptyPageTitle === "Vidéos de mise en service" ? 'sav' : 'home')}
+              onBack={() => navigateWithTransition(previousScreen)}
             />
           )}
 
