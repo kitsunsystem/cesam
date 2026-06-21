@@ -360,7 +360,7 @@ const Backoffice = ({ tickets, onUpdateStatus, onDeleteTicket, onClose, addToast
 
                       {ticket.description && (
                         <div style={{ marginTop: '0.65rem', background: 'rgba(255, 255, 255, 0.012)', padding: '0.55rem', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.04)' }}>
-                          <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontWeight: 600, marginBottom: '0.2rem', letterSpacing: '0.05em' }}>DESCRIPTION DU PROBLÈME</div>
+                          <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontWeight: 600, marginBottom: '0.2rem', letterSpacing: '0.05em' }}>OBSERVATION</div>
                           <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', lineHeight: '1.4', whiteSpace: 'pre-wrap' }}>{ticket.description}</div>
                         </div>
                       )}

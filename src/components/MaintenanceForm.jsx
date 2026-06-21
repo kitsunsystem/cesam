@@ -72,6 +72,9 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       newErrors.email = "Format email invalide.";
     }
+    if (!formData.serialNumber.trim()) {
+      newErrors.serialNumber = "Numéro de série obligatoire.";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -287,21 +290,22 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
           </div>
 
           <div className="form-group animate-liquid-in span-2-cols">
-            <label htmlFor="serialNumber">Numéro de série de l'appareil (facultatif)</label>
+            <label htmlFor="serialNumber">Numéro de série de l'appareil</label>
             <input
               type="text"
               id="serialNumber"
               name="serialNumber"
-              className="form-input"
+              className={`form-input ${errors.serialNumber ? 'input-error' : ''}`}
               placeholder="Ex: CS-2026-X891"
               value={formData.serialNumber}
               onChange={handleInputChange}
               onFocus={handleInputFocus}
             />
+            {errors.serialNumber && <span style={{ color: 'var(--color-red)', fontSize: '0.72rem', fontWeight: 300 }}>{errors.serialNumber}</span>}
           </div>
 
           <div className="form-group animate-liquid-in span-2-cols">
-            <label htmlFor="description">Description du problème / Détail de l'intervention (facultatif)</label>
+            <label htmlFor="description">Observation (facultatif)</label>
             <textarea
               id="description"
               name="description"
