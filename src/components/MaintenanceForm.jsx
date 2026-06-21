@@ -72,12 +72,6 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       newErrors.email = "Format email invalide.";
     }
-    if (!formData.serialNumber.trim()) {
-      newErrors.serialNumber = "Numéro de série obligatoire.";
-    }
-    if (!formData.description.trim()) {
-      newErrors.description = "Description du problème obligatoire.";
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -292,35 +286,33 @@ const MaintenanceForm = ({ onSubmit, onBack, addToast }) => {
             {errors.email && <span style={{ color: 'var(--color-red)', fontSize: '0.72rem', fontWeight: 300 }}>{errors.email}</span>}
           </div>
 
-          <div className="form-group animate-liquid-in" style={{ gridColumn: 'span 2' }}>
-            <label htmlFor="serialNumber">Numéro de série de l'appareil</label>
+          <div className="form-group animate-liquid-in span-2-cols">
+            <label htmlFor="serialNumber">Numéro de série de l'appareil (facultatif)</label>
             <input
               type="text"
               id="serialNumber"
               name="serialNumber"
-              className={`form-input ${errors.serialNumber ? 'input-error' : ''}`}
+              className="form-input"
               placeholder="Ex: CS-2026-X891"
               value={formData.serialNumber}
               onChange={handleInputChange}
               onFocus={handleInputFocus}
             />
-            {errors.serialNumber && <span style={{ color: 'var(--color-red)', fontSize: '0.72rem', fontWeight: 300 }}>{errors.serialNumber}</span>}
           </div>
 
-          <div className="form-group animate-liquid-in" style={{ gridColumn: 'span 2' }}>
-            <label htmlFor="description">Description du problème / Détail de l'intervention</label>
+          <div className="form-group animate-liquid-in span-2-cols">
+            <label htmlFor="description">Description du problème / Détail de l'intervention (facultatif)</label>
             <textarea
               id="description"
               name="description"
               rows="3"
-              className={`form-input ${errors.description ? 'input-error' : ''}`}
+              className="form-input"
               placeholder="Ex: Le système de refroidissement ne s'active pas, code d'erreur E04..."
               value={formData.description}
               onChange={handleInputChange}
               onFocus={handleInputFocus}
               style={{ resize: 'vertical', fontFamily: 'inherit' }}
             />
-            {errors.description && <span style={{ color: 'var(--color-red)', fontSize: '0.72rem', fontWeight: 300 }}>{errors.description}</span>}
           </div>
         </div>
 
